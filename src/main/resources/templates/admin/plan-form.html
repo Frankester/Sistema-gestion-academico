@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{plan.nuevo.title}">Plan Nuevo</title>
+
+<section>
+
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{/admin/planes}"
+       th:text="#{nav.planes}">Planes</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{/admin/planes/nuevo}"
+       th:text="#{nav.nuevo}">Nuevo </a>
+  </div>
+
+  <h2 class="section-title" th:text="#{plan.nuevo.heading}">
+    Plan nuevo
+  </h2>
+
+  <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/admin/planes')}" />
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+  <form th:action="@{/admin/planes/nuevo}"
+        th:object="${planForm}"
+        method="post"
+        class="form-card">
+
+    <div class="form-group">
+      <label for="nombre" th:text="#{label.nombre}"></label>
+      <input type="text" th:field="*{nombre}" required/>
+      <span class="red" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="idCarrera" th:text="#{label.carrera}">Carrera</label>
+      <select th:field="*{idCarrera}" required>
+        <option value="" th:text="#{select.placeholder}"></option>
+        <option th:each="carrera : ${carreras}"
+                th:value="${carrera.getIdCarrera()}"
+                th:text="${carrera.getNombreCarrera()}">
+        </option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('idCarrera')}" th:errors="*{idCarrera}"></span>
+    </div>
+
+    <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+
+  </form>
+</section>
+</html>

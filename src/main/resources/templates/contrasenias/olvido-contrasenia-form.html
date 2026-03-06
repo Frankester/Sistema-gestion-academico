@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" charset="UTF-8" content="text/html;">
+  <title th:text="#{contrasenias.olvido.form.title}"></title>
+
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/form.css}">
+</head>
+<body>
+
+  <main class="container">
+    <h1 class="section-title" th:utext="#{contrasenias.olvido.form.heading}"></h1>
+
+    <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+    <div class="form-card">
+      <form th:action="@{/contrasenias/olvido}"
+            method="post"
+            th:object="${olvidoForm}"
+      >
+        <div class="form-group">
+          <label for="email" th:text="#{label.mail}">Correo electronico</label>
+          <input type="email"
+                 th:field="*{email}"
+                 th:placeholder="#{label.mail-example}"
+                 required
+                 autofocus
+          />
+        </div>
+
+        <button type="submit" class="btn-primary"
+                th:text="#{btn.confirmar.mail}">
+        </button>
+
+        <p class="section-subtitle"
+           th:text="#{contrasenias.olvido.form.helper}">
+          Te enviaremos un enlace para restablecer tu contraseña.
+        </p>
+      </form>
+    </div>
+
+  </main>
+
+  <footer th:replace="~{base :: .main-footer}" class="main-footer">
+  </footer>
+</body>
+</html>

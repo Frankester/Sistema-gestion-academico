@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8" content="text/html;">
+    <title th:text="#{btn.login}"></title>
+    <link rel="stylesheet"  type="text/css" th:href="@{/css/login.css}" />
+</head>
+<body>
+
+    <header th:insert="~{index :: .section-title}"></header>
+
+    <main class="content">
+        <h1 th:utext="#{btn.login}"></h1>
+
+        <div th:if="${param.error}" class="error" th:text="#{login.error}"></div>
+        <div th:if="${param.logout}" class="logout"  th:text="#{login.logout}">
+
+        </div>
+        <form th:action="@{/login}" method="post" class="form">
+            <div>
+                <input type="text" name="username" th:placeholder="#{login.username}" required autofocus/>
+            </div>
+            <div>
+                <input type="password" name="password" th:placeholder="#{login.password}" required/>
+            </div>
+            <input type="submit" th:value="#{btn.login}" />
+            <span th:text="#{label.contrasenias.olvido}"></span>
+            <a th:text="#{label.aqui}" th:href="@{/contrasenias/olvido}"></a>
+        </form>
+    </main>
+
+    <footer th:replace="~{base :: .main-footer}" class="main-footer">
+    </footer>
+</body>
+</html>

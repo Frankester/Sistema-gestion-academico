@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{plan.title(${plan.getNombre()})}">Plan </title>
+
+<section>
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{'/admin/planes'}"
+       th:text="#{nav.planes}">Planes</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/admin/planes/' +${plan.getIdPlan()}}"
+       th:text="#{nav.plan(${plan.getNombre()})}">Plan </a>
+  </div>
+
+  <h2 class="section-title" th:text="#{plan.detail.heading(${plan.getNombre()})}">
+    Gestionar materias del plan
+  </h2>
+
+  <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/admin/planes')}" />
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+  <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+  <div class="actions">
+    <a class="btn-secondary"
+       th:href="@{'/admin/planes/' + ${plan.getIdPlan()} + '/materias/nueva'}"
+      th:text="#{button.agregar-materia}"
+    >Agregar Materia
+    </a>
+  </div>
+
+  <div class="card plan-card">
+
+    <div class="plan-header">
+      <div class="info-row">
+        <span class="label" th:text="#{label.plan}"></span>
+        <span class="value" th:text="${plan.getNombre()}"></span>
+      </div>
+
+      <div class="info-row">
+        <span class="label" th:text="#{label.carrera}"></span>
+        <span class="value" th:text="${plan.getCarrera()}"></span>
+      </div>
+    </div>
+
+    <hr/>
+
+    <div class="niveles">
+      <div class="nivel"
+           th:each="anio : ${plan.getAnios()}">
+
+        <h3 class="nivel-title"
+            th:text="'Nivel ' + ${anio.getAnio()}">
+        </h3>
+
+        <ul class="materias-list">
+          <li class="materia-item"
+              th:each="materia : ${anio.getMaterias()}"
+          >
+            <span th:text="${materia.getNombreMateria()}"></span>
+
+            <form th:action="@{'/admin/planes/'+${plan.getIdPlan()}+'/materias/' + ${materia.getIdMateria()} + '/eliminar'}"
+                  method="post"
+                  onsubmit="return confirm('¿Estas seguro que queres eliminar la materia?');">
+
+              <button type="submit" class="btn-del" th:text="#{button.eliminar}">
+
+              </button>
+            </form>
+
+          </li>
+        </ul>
+
+        <p class="empty"
+           th:if="${#lists.isEmpty(anio.materias)}"
+           th:text="#{plan.sin-materias}">
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+
+</section>
+</html>

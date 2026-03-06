@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{materia.nueva.title}">Materia Nueva</title>
+
+<section>
+
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{'/admin/planes'}"
+       th:text="#{nav.planes}">Planes</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/admin/planes/' +${idPlan}}"
+       th:text="#{nav.plan(${planNombre})}">Plan </a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/admin/planes/' +${idPlan} + '/materias/nueva'}"
+       th:text="#{nav.materia.nueva}">Nueva Materia</a>
+  </div>
+
+  <h2 class="section-title" th:text="#{materia.nueva.heading}">
+    Materia nueva
+  </h2>
+
+  <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/admin/planes/' +${idPlan})}" />
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+  <form th:action="@{'/admin/planes/'+${idPlan}+'/materias/nueva'}"
+        th:object="${materiaForm}"
+        method="post"
+        class="form-card">
+
+    <div class="form-group">
+      <label for="nombreMateria" th:text="#{label.nombre}"></label>
+      <input type="text" th:field="*{nombreMateria}" required/>
+      <span class="red" th:if="${#fields.hasErrors('nombreMateria')}" th:errors="*{nombreMateria}"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="idCarrera" th:text="#{label.carrera}">Carrera</label>
+      <select th:field="*{idCarrera}" required>
+        <option value="" th:text="#{select.placeholder}"></option>
+        <option th:each="carrera : ${carreras}"
+                th:value="${carrera.getIdCarrera()}"
+                th:text="${carrera.getNombreCarrera()}">
+        </option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('idCarrera')}" th:errors="*{idCarrera}"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="anioPerteneciente" th:text="#{label.nivel}"></label>
+      <input type="number" th:field="*{anioPerteneciente}" required/>
+      <span class="red" th:if="${#fields.hasErrors('anioPerteneciente')}" th:errors="*{anioPerteneciente}"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="idsCorrelativas" th:text="#{label.correlativas}">Correlativas</label>
+      <select th:field="*{idsCorrelativas}" required multiple>
+        <option value="" th:text="#{select.multile.placeholder}" disabled selected></option>
+        <option th:each="materia : ${materias}"
+                th:value="${materia.getIdMateria()}"
+                th:text="${materia.getNombreMateria()}">
+        </option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('idsCorrelativas')}" th:errors="*{idsCorrelativas}"></span>
+    </div>
+
+    <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+
+  </form>
+</section>
+</html>

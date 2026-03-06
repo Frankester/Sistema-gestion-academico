@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="${esEditar} ? #{carrera.editar.title} : #{carrera.nuevo.title}">Carrera Nuevo</title>
+
+<section>
+
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{/admin/carreras}"
+       th:text="#{nav.carreras}">Carreras</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="${esEditar} ?
+        @{'/admin/carreras/editar' + ${carreraForm.getIdCarrera()}} :
+        @{/admin/carreras/nuevo}"
+       th:text="#{nav.nuevo}">Nuevo </a>
+  </div>
+
+  <h2 class="section-title" th:text=" ${esEditar} ? #{carrera.editar.heading} : #{carrera.nuevo.heading}">
+    Carrera nuevo
+  </h2>
+
+  <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/admin/carreras')}" />
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+  <form th:action="${esEditar} ?
+    @{'/admin/carreras/editar/'+${carreraForm.getIdCarrera()}} :
+    @{/admin/carreras/nuevo}"
+        th:object="${carreraForm}"
+        method="post"
+        class="form-card">
+
+    <div class="form-group">
+      <label for="nombreCarrera" th:text="#{label.nombre}"></label>
+      <input type="text" th:field="*{nombreCarrera}" th:placeholder="#{carrera.nombre.placeholder}" required/>
+      <span class="red" th:if="${#fields.hasErrors('nombreCarrera')}" th:errors="*{nombreCarrera}"></span>
+    </div>
+
+    <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+
+  </form>
+</section>
+</html>

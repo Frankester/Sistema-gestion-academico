@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{curso.title(${curso.getNombreMateria()})}">Curso</title>
+
+<section>
+
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{'/admin/cursos'}"
+       th:text="#{nav.cursos}">Cursos</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/admin/cursos/' +${curso.getComision()}}"
+       th:text="#{nav.curso}">Curso</a>
+  </div>
+
+  <h2 class="section-title" th:text="#{curso.detail.heading(${curso.getNombreMateria()})}">
+    Detalles del curso
+  </h2>
+
+
+  <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/admin/cursos')}" />
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+  <div class="card">
+    <div class="info-row">
+      <span class="label" th:text="#{label.materia}"></span>
+      <span class="value" th:text="${curso.getNombreMateria()}"></span>
+    </div>
+    <div class="info-row">
+      <span class="label" th:text="#{label.cant-alumnos}"></span>
+      <span class="value" th:text="${curso.getCantAlumnos()}"></span>
+    </div>
+    <div class="info-row">
+      <span class="label" th:text="#{label.comision}"></span>
+      <span class="value" th:text="${curso.getComision()}"></span>
+    </div>
+    <div class="info-row">
+      <span class="label" th:text="#{label.horarios}"></span>
+      <span class="value" th:text="${curso.getHorarios()}"></span>
+    </div>
+    <div class="info-row">
+      <span class="label" th:text="#{label.docente}"></span>
+      <span class="value" th:text="${curso.getNombreYApellidoDocente()}"></span>
+    </div>
+    <div class="info-row">
+      <span class="label" th:text="#{label.fecha-inicio-cursada}"></span>
+      <span class="value" th:text="${curso.getFechaInicio()}"></span>
+    </div>
+  </div>
+
+</section>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es"  xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle,content, nav)">
+<head >
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:replace="${pageTitle}">SIGA</title>
+
+  <link rel="stylesheet" type="text/css" th:href="@{/css/base.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/form.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/table.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/register.css}" >
+</head>
+<body>
+
+<header class="main-header">
+  <a href="/" class="link-index">
+    <h1 th:text="#{title}">Sistema de Gestión Académico</h1>
+  </a>
+  <div class="row row-space-center">
+    <nav th:replace="${nav}" class="main-nav"></nav>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="btn-primary" th:utext="#{btn.cerrar}"></button>
+    </form>
+  </div>
+</header>
+
+<main class="container" >
+  <div th:replace="${content}"></div>
+</main>
+
+<footer class="main-footer">
+  <p><span th:utext="#{copyright(${#strings.toString(#temporals.createNow().year)})}"></span></p>
+</footer>
+
+</body>
+</html>

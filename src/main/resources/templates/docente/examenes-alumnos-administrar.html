@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{docente/administrar :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{curso.alumnos.title}">Administrar Alumnos</title>
+
+<section>
+
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{'/docente/examenes'}"
+       th:text="#{nav.examenes}">Examenes</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/docente/examenes/'+${idInstanciaExamen}+'/alumnos'}"
+       th:text="#{nav.alumnos}">Alumnos</a>
+  </div>
+
+  <h2 th:text="#{curso.alumnos.heading}">Administrar alumnos</h2>
+
+  <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/docente/examenes')}" />
+
+
+  <form th:action="@{'/docente/examenes/' + ${idInstanciaExamen} + '/alumnos'}"
+        method="get"
+        class="filter-container">
+    <input type="text"
+           name="search"
+           th:value="${search}"
+           th:placeholder="#{label.busqueda.nombre-apellido.placeholder}"
+           class="filter-input"/>
+
+    <button type="submit"
+            th:text="#{button.buscar}"
+            class="btn-secondary"
+    >
+      Buscar
+    </button>
+  </form>
+
+  <div th:if="${#lists.isEmpty(alumnos)}"
+       th:text="#{examen.alumnos.empty}"
+       class="empty-message"></div>
+
+  <table class="table" th:if="${!#lists.isEmpty(alumnos)}">
+    <thead>
+    <tr>
+      <th th:text="#{label.nombre-apellido}">Nombre y Apellido</th>
+      <th th:text="#{label.nota}">Nota</th>
+      <th th:text="#{label.acciones}">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="alumno : ${alumnos}">
+      <td th:text="${alumno.getNombreYApellido()}"></td>
+      <td th:text="${alumno.getNotaExamen()} ? ${alumno.getNotaExamen()} : '-'"></td>
+      <td class="acciones">
+        <a th:if="!${alumno.getNotaExamen()}"
+           th:href="@{'/docente/examenes/' + ${idInstanciaExamen} + '/alumnos/'+${alumno.getIdPersona()} + '/nota/nuevo'}"
+           th:text="#{button.subir-nota}">Subir Nota</a>
+
+        <a th:if="${alumno.getNotaExamen()}"
+           th:href="@{'/docente/examenes/' + ${idInstanciaExamen} + '/alumnos/'+${alumno.getIdPersona()} + '/nota/edit'}"
+           th:text="#{button.editar-nota}">Editar Nota</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</section>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle,content)"
+      th:replace="~{base :: layout (${pageTitle}, ${content}, ~{::nav})}">
+
+<nav class="main-nav">
+  <a th:href="@{/admin/inscripciones}" th:text="#{nav.inscripciones}">Inscribir</a>
+  <a th:href="@{/admin/examenes}" th:text="#{nav.examenes}">Exámenes</a>
+  <a th:href="@{/admin/cursos}" th:text="#{nav.cursos}">Cursos</a>
+  <a th:href="@{/admin/planes}" th:text="#{nav.planes}">Planes</a>
+  <a th:href="@{/admin/carreras}" th:text="#{nav.carreras}">Carreras</a>
+  <a th:href="@{/admin/register}" th:text="#{nav.registrar-usuario}">Registrar Usuario</a>
+  <a th:href="@{/admin/datos}" th:text="#{nav.datos-personales}">Datos Personales</a>
+</nav>

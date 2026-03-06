@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html th:replace="~{docente/administrar :: layout (~{::title}, ~{::section})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+
+<title th:text="#{curso.alumnos.title}">Administrar Alumnos</title>
+
+
+<section >
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{'/docente/cursos'}"
+       th:text="#{nav.cursos}">Cursos</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/docente/cursos/'+${idCurso}+'/alumnos'}"
+       th:text="#{nav.alumnos}">Alumnos</a>
+  </div>
+
+  <h2 th:text="#{curso.alumnos.heading}">Administrar alumnos</h2>
+
+  <div class="actions-top">
+    <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/docente/cursos')}" />
+
+
+    <a th:href="@{'/docente/cursos/' + ${idCurso} + '/matricular'}"
+       class="btn-secondary"
+       th:text="#{button.agregar-alumno}">
+      Agregar Alumno
+    </a>
+  </div>
+
+  <form th:action="@{'/docente/cursos/' + ${idCurso} + '/alumnos'}"
+        method="get"
+        class="filter-container">
+
+    <input type="text"
+           name="search"
+           th:value="${search}"
+           th:placeholder="#{label.busqueda.nombre-apellido.placeholder}"
+           class="filter-input"/>
+
+    <button type="submit" th:text="#{button.buscar}" class="btn-secondary">
+      Buscar
+    </button>
+
+  </form>
+
+  <div th:if="${#lists.isEmpty(alumnos)}"
+       th:text="#{curso.alumnos.empty}"
+       class="empty-message"></div>
+
+  <table class="table" th:if="${!#lists.isEmpty(alumnos)}">
+    <thead>
+    <tr>
+      <th th:text="#{label.nombre-apellido}">Nombre y Apellido</th>
+      <th th:text="#{label.nota-final}">Nota final</th>
+      <th th:text="#{label.acciones}">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="alumno : ${alumnos}">
+      <td th:text="${alumno.getNombreYApellido()}"></td>
+      <td th:text="${#objects.nullSafe(alumno.getNotaFinal(),'-')}"></td>
+      <td class="acciones">
+        <a th:href="@{'/docente/cursos/' + ${idCurso} + '/alumnos/'+${alumno.getIdPersona()} + '/notas'}"
+           th:text="#{button.notas-ver}">Ver Notas</a>
+
+
+        <th:block th:replace="~{utils/button-eliminar ::
+          btn-eliminar('/docente/cursos/' + ${idCurso} + '/alumnos/' + ${alumno.getIdPersona()} + '/eliminar',
+          '¿Estás seguro que querés dar de baja al alumno '+${alumno.getNombreYApellido()}+' ?')}"
+        />
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</section>
+
+</html>

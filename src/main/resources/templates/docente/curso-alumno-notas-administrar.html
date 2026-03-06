@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{docente/administrar :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{curso.alumno.notas.title}">Administrar Notas</title>
+
+<section>
+
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{'/docente/cursos'}"
+       th:text="#{nav.cursos}">Cursos</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/docente/cursos/'+${idCurso}+'/alumnos'}"
+       th:text="#{nav.alumnos}">Alumnos</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/docente/cursos/'+${idCurso}+'/alumnos/'+${idAlumno}+'/notas'}"
+       th:text="#{nav.notas}">Notas</a>
+  </div>
+
+  <h2 th:text="#{curso.alumno.notas.heading}">Administrar notas</h2>
+
+  <div class="actions-top">
+
+    <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/docente/cursos/'+${idCurso}+'/alumnos')}" />
+
+    <a th:if="${!cerroCursada}"
+       th:href="@{'/docente/cursos/' + ${idCurso} +'/alumnos/' + ${idAlumno} + '/notas/nuevo'}"
+       class="btn-secondary"
+       th:text="#{button.agregar-nota}">
+      Agregar Nota
+    </a>
+
+  </div>
+
+  <div th:if="${#lists.isEmpty(notas)}"
+       th:text="#{curso.notas.empty}"
+       class="empty-message"></div>
+
+  <table class="table" th:if="${!#lists.isEmpty(notas)}">
+    <thead>
+    <tr>
+      <th th:text="#{label.nota}">Nota</th>
+      <th th:text="#{label.fecha-subida}">Fecha de subida</th>
+      <th th:text="#{label.acciones}">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="nota : ${notas}">
+      <td th:text="${nota.getNota()}"></td>
+      <td th:text="${nota.getFechaSubida()}"></td>
+      <td class="acciones">
+        <a th:href="@{'/docente/cursos/' + ${idCurso} + '/alumnos/'+${idAlumno} + '/notas/edit/' + ${nota.getIdNota()}}"
+           th:text="#{button.editar}">Editar</a>
+
+
+        <th:block th:replace="~{utils/button-eliminar ::
+          btn-eliminar('/docente/cursos/' + ${idCurso} + '/alumnos/'+${idAlumno} + '/notas/' + ${nota.getIdNota()}+ '/eliminar',
+          '¿Estás seguro que querés eliminar la nota ?')}"
+        />
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <form th:action="@{'/docente/cursos/' + ${idCurso} +'/alumnos/' + ${idAlumno} + '/cerrar'}"
+        method="post"
+        th:if="${#lists.size(notas) >= 2 && !cerroCursada}"
+        class="form-cerrar"
+  >
+    <button type="submit"
+            th:text="#{button.cerrar-cursada}"
+            class="btn-secondary">
+      Cerrar Cursada
+    </button>
+  </form>
+
+</section>
+</html>

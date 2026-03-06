@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{cursos.title}">Administrar Cursos</title>
+
+<section>
+
+  <h2 th:text="#{cursos.heading}">Administrar cursos</h2>
+
+  <a th:href="@{/admin/cursos/nuevo}" class="btn-secondary"
+     th:text="#{button.nuevoCurso}">
+    Nuevo Curso
+  </a>
+
+    <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+  <div th:if="${#lists.isEmpty(cursos)}"
+       th:text="#{cursos.empty}"
+       class="empty-message"></div>
+
+  <table class="table" th:if="${!#lists.isEmpty(cursos)}">
+    <thead>
+    <tr>
+      <th th:text="#{label.nombre}">Nombre</th>
+      <th th:text="#{label.docente}">Docente</th>
+      <th th:text="#{label.comision}">Comision</th>
+      <th th:text="#{label.horarios}">Horarios</th>
+      <th th:text="#{label.acciones}">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="curso : ${cursos}">
+        <td th:text="${curso.getNombreMateria()}"></td>
+        <td th:text="${curso.getNombreYApellidoDocente()}"></td>
+        <td>
+            <a th:text="${curso.getComision()}"
+               th:href="@{'/admin/cursos/' + ${curso.getComision()}}"></a>
+        </td>
+        <td th:text="${curso.getHorarios()}"></td>
+      <td>
+          <a th:href="@{'/admin/cursos/editar/' + ${curso.getIdCurso()}}"
+             th:text="#{button.editar}"></a>
+
+          <a th:href="@{'/admin/cursos/eliminar/' + ${curso.getIdCurso()}}"
+             class="danger"
+             th:text="#{button.eliminar}">
+          </a>
+
+
+        </td>
+    </tr>
+    </tbody>
+  </table>
+
+</section>
+</html>

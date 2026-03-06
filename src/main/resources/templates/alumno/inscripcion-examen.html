@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{alumno/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{alumno.examenes.title}">Inscribirse a Exámenes</title>
+
+<section>
+    <h2 class="section-title"
+        th:text="#{alumno.examenes.heading}">
+        Preinscribirse a Materias
+    </h2>
+
+
+    <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+    <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+    <form th:action="@{/alumno/examenes}"
+          method="get"
+          class="filter-container">
+        <input type="text"
+               name="search"
+               th:value="${search}"
+               th:placeholder="#{label.busqueda.nombre-materia.placeholder}"
+               class="filter-input"/>
+
+        <button type="submit" th:text="#{button.buscar}" class="btn-secondary">
+            Buscar
+        </button>
+
+    </form>
+
+    <h3 class="section-subtitle"
+        th:text="#{alumno.examenes.inscrito}">
+        Exámenes inscripto
+    </h3>
+
+    <div th:if="${#lists.isEmpty(instanciasExamenesInscripto)}"
+         th:text="#{alumno.examenes.inscrito.empty}"
+         class="empty-message"></div>
+
+    <table class="table" th:if="${!#lists.isEmpty(instanciasExamenesInscripto)}">
+        <thead>
+        <tr>
+            <th th:text="#{label.materia}">Materia</th>
+            <th th:text="#{label.fecha}">Fecha</th>
+            <th th:text="#{label.sede}">Sede</th>
+            <th th:text="#{label.nota}">Nota</th>
+            <th th:text="#{label.acciones}">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="instanciaExamen : ${instanciasExamenesInscripto}">
+            <td th:text="${instanciaExamen.getMateriaNombre()}"></td>
+            <td th:text="${instanciaExamen.getFecha()}"></td>
+            <td th:text="${instanciaExamen.getSede()}"></td>
+            <td th:text="${#objects.nullSafe(instanciaExamen.getNota(), '-')}"></td>
+            <td class="acciones">
+
+                <th:block th:if="${instanciaExamen.getSePuedeEliminar()}">
+                    <th:block  th:replace="~{utils/button-eliminar ::
+          btn-eliminar('/alumno/examenes/inscripcion/' + ${instanciaExamen.getIdExamen()} + '/eliminar',
+          '¿Estás seguro que querés eliminar la inscripción ?')}"
+                    />
+                </th:block>
+                <span th:if="${!instanciaExamen.getSePuedeEliminar()}">-</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <h3 class="section-subtitle"
+        th:text="#{alumno.examenes.rendir}">
+        Exámenes para rendir
+    </h3>
+
+    <div th:if="${#lists.isEmpty(instanciasExamenes)}"
+         th:text="#{alumno.examenes.rendir.empty}"
+         class="empty-message"></div>
+
+    <table class="table" th:if="${!#lists.isEmpty(instanciasExamenes)}">
+        <thead>
+        <tr>
+            <th th:text="#{label.materia}">Materia</th>
+            <th th:text="#{label.fecha}">Fecha</th>
+            <th th:text="#{label.sede}">Sede</th>
+            <th th:text="#{label.acciones}">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="instanciaExamen : ${instanciasExamenes}">
+            <td th:text="${instanciaExamen.getMateriaNombre()}"></td>
+            <td th:text="${instanciaExamen.getFecha()}"></td>
+            <td th:text="${instanciaExamen.getSede()}"></td>
+            <td class="acciones">
+
+                <form th:action="@{'/alumno/examenes/inscripcion/'+${instanciaExamen.getIdExamen()}}"
+                      method="post"
+                      style="display:inline">
+
+                    <button type="submit"
+                            class="btn-inscribirse"
+                            th:text="#{button.inscribirse}">
+                        Inscribirse
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</section>
+</html>

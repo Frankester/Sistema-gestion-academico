@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html
+        th:replace="~{docente/administrar :: layout (~{::title}, ~{::section})}"
+        xmlns:th="http://www.thymeleaf.org">
+
+<title th:text="#{cursos.title}">Administrar Cursos</title>
+
+
+<section >
+    <h2 th:text="#{cursos.heading}">Administrar cursos</h2>
+
+
+    <div th:if="${#lists.isEmpty(cursos)}"
+         th:text="#{cursos.empty}"
+         class="empty-message"></div>
+
+    <table class="table" th:if="${!#lists.isEmpty(cursos)}">
+        <thead>
+        <tr>
+            <th th:text="#{label.materia}">Materia</th>
+            <th th:text="#{label.total-alumnos}">Total de alumnos</th>
+            <th th:text="#{label.comision}">Comision</th>
+            <th th:text="#{label.horarios-cursada}">Horarios de cursada</th>
+            <th th:text="#{label.fecha-inicio}">Fecha de inicio</th>
+            <th th:text="#{label.acciones}">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="curso : ${cursos}">
+            <td th:text="${curso.getNombreMateria()}"></td>
+            <td th:text="${curso.getCantAlumnos()}"></td>
+            <td th:text="${curso.getComision()}"></td>
+            <td th:text="${curso.getHorarios()}"></td>
+            <td th:text="${curso.getFechaInicio()}"></td>
+            <td>
+                <a th:href="@{'/docente/cursos/' + ${curso.getIdCurso()} + '/alumnos'}"
+                   th:text="#{button.alumnos}">Ver Alumnos</a>
+
+                <form th:action="@{'/docente/cursos/' + ${curso.getIdCurso()} + '/cerrar'}"
+                      method="post"
+                      th:onsubmit="return confirm('¿Estas seguro de cerrar la cursada?\n\nAdvertencia: Los alumnos que no tienen cerrada la cursada se consideraran como ABANDONO');"
+                      style="display:inline">
+
+                    <button
+                            type="submit"
+                            class="btn-inscribirse"
+                            th:text="#{button.cerrar-curso}">
+                        Cerrar Curso
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</section>
+
+</html>

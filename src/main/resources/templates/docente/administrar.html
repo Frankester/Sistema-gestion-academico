@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle, contentAdmin)"
+      th:replace="~{docente/base :: layout (${pageTitle}, ~{::adminContent(${contentAdmin})})}">
+
+
+    <div th:fragment="adminContent(content)">
+      <div class="admin-container">
+
+
+          <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+          <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+        <!-- CONTENIDO DINÁMICO -->
+        <div th:replace="${content}" ></div>
+      </div>
+
+    </div>
+
+
+</html>

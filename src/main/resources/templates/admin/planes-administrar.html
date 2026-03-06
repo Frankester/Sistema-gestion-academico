@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{planes.title}">Administrar Cursos</title>
+
+<section>
+
+    <h2 th:text="#{planes.heading}">Administrar cursos</h2>
+
+    <a th:href="@{/admin/planes/nuevo}" class="btn-secondary"
+       th:text="#{button.nuevoPlan}">
+        Nuevo Plan
+    </a>
+
+    <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+    <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+    <div th:if="${#lists.isEmpty(planes)}"
+         th:text="#{planes.empty}"
+         class="empty-message"></div>
+
+    <form th:action="@{/admin/planes}" method="get" class="filter-container">
+        <label for="carreraId" class="filter-label"
+               th:text="#{label.filtrar-por-carrera}">
+            Filtrar por carrera
+        </label>
+
+        <select id="carreraId"
+                name="carreraId"
+                onchange="this.form.submit()"
+                class="filter-select">
+
+            <option value=""
+                    th:selected="${carreraSeleccionada == null}"
+                    th:text="#{label.todos}">
+                Todos
+            </option>
+
+            <option th:each="carrera : ${carreras}"
+                    th:value="${carrera.idCarrera}"
+                    th:text="${carrera.nombreCarrera}"
+                    th:selected="${carreraSeleccionada == carrera.idCarrera}">
+            </option>
+
+        </select>
+    </form>
+
+    <table class="table" th:if="${!#lists.isEmpty(planes)}">
+        <thead>
+        <tr>
+            <th th:text="#{label.nombre}">Nombre</th>
+            <th th:text="#{label.carrera}">Carrera</th>
+            <th th:text="#{label.cant-anios}">Cantidad de años</th>
+            <th th:text="#{label.acciones}">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="plan : ${planes}">
+            <td th:text="${plan.getNombre()}"></td>
+            <td th:text="${plan.getCarrera()}"></td>
+            <td th:text="${#lists.size(plan.getAnios())}"></td>
+            <td>
+                <a th:href="@{'/admin/planes/'+ ${plan.getIdPlan()}}"
+                   th:text="#{button.gestion-materias}">
+                    Gestionar materias
+                </a>
+
+                <a th:href="@{'/admin/planes/eliminar/' + ${plan.getIdPlan()}}"
+                   class="danger"
+                   th:text="#{button.eliminar}">
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</section>
+</html>

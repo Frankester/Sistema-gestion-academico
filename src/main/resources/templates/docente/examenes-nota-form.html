@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{docente/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="${esEditar} ?
+    #{examen.nota.title-edit} :
+    #{examen.nota.title}"
+>Subir Nota</title>
+
+<section>
+
+    <div class="breadcrum">
+        <a class="breadcrum-item"
+           th:href="@{'/docente/examenes'}"
+           th:text="#{nav.examenes}">Examenes</a>
+        <span>/</span>
+        <a class="breadcrum-item"
+           th:href="@{'/docente/examenes/'+${idInstanciaExamen}+'/alumnos'}"
+           th:text="#{nav.alumnos}">Alumnos</a>
+        <span>/</span>
+        <a class="breadcrum-item"
+           th:href="${esEditar} ?
+        @{'/docente/examenes/'+${idInstanciaExamen}+'/alumnos/'+${idAlumno}+'/nota/edit'} :
+        @{'/docente/examenes/'+${idInstanciaExamen}+'/alumnos/'+${idAlumno}+'/nota/nuevo'}"
+           th:text="${esEditar} ? #{nav.edit} :#{nav.nuevo}">Nuevo</a>
+    </div>
+
+
+    <h2 class="section-title"
+        th:text="${esEditar} ?
+      #{examen.nota.heading-edit} :
+       #{examen.nota.heading}"
+    >Subir nota
+    </h2>
+
+
+    <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/docente/examenes/'+${idInstanciaExamen}+'/alumnos')}" />
+
+    <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+
+    <!-- El edit y el nuevo hacen lo mismo en el controller, por eso siempre es el mismo th:action -->
+    <form th:action="@{'/docente/examenes/'+ ${idInstanciaExamen} + '/alumnos/' +${idAlumno} + '/nota/nuevo'}"
+          th:object="${notaExamenForm}"
+          method="post"
+          class="form-card">
+
+        <div class="form-group">
+            <label for="nota" th:text="#{label.nota}">Nota</label>
+            <input type="number"
+                   th:field="*{nota}"
+                   th:placeholder="#{nota.input.placeholder}"
+                   required
+                   autofocus
+            />
+            <span class="red" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}"></span>
+        </div>
+
+        <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+        <th:block th:replace="~{utils/button-cancelar :: btn-cancelar('/docente/examenes/' + ${idInstanciaExamen} + '/alumnos')}" />
+
+    </form>
+</section>
+</html>

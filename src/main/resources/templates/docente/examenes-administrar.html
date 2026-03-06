@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{docente/administrar :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{examenes.administrar.title}">Administrar Examenes</title>
+
+<section>
+
+    <h2 th:text="#{examenes.administrar.heading}">Administrar Examenes</h2>
+
+
+
+    <div th:if="${#lists.isEmpty(examenes)}"
+         th:text="#{examenes.empty}"
+         class="empty-message"></div>
+
+
+    <table class="table" th:if="${!#lists.isEmpty(examenes)}">
+        <thead>
+        <tr>
+            <th th:text="#{label.materia}">Materia</th>
+            <th th:text="#{label.fecha-hora-examen}">Fecha Hora del Exámen</th>
+            <th th:text="#{label.cant-alumnos}">Cantidad de Alumnos</th>
+            <th th:text="#{label.acciones}">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="examen : ${examenes}">
+            <td th:text="${examen.getMateriaNombre()}"></td>
+            <td th:text="${examen.getFecha()}"></td>
+            <td th:text="${examen.getCantidadAlumnos()}"></td>
+            <td>
+                <a th:href="@{'/docente/examenes/' + ${examen.getIdExamen()} + '/alumnos'}"
+                   th:text="#{button.alumnos}">Ver Alumnos</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</section>
+</html>

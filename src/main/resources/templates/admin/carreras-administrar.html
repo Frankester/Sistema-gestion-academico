@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{carreras.administrar.title}">Administrar Examenes</title>
+
+<section>
+    <h2 th:text="#{carreras.administrar.heading}">Administrar examenes</h2>
+
+    <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+    <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+    <a th:href="@{/admin/carreras/nuevo}" class="btn-secondary"
+       th:text="#{button.nuevaCarrera}">
+        Nueva Carrera
+    </a>
+
+
+    <div th:if="${#lists.isEmpty(carreras)}"
+         th:text="#{carreras.empty}"
+         class="empty-message"></div>
+
+    <table class="table" th:if="${!#lists.isEmpty(carreras)}">
+        <thead>
+            <tr>
+                <th th:text="#{label.materia}">Carrera</th>
+                <th th:text="#{label.acciones}">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="carrera : ${carreras}">
+                <td >
+                    <a th:text="${carrera.getNombreCarrera()}"
+                       th:href="@{'/admin/planes?carreraId=' + ${carrera.getIdCarrera()}}"></a>
+                </td>
+                <td>
+                    <a th:href="@{'/admin/carreras/eliminar/' + ${carrera.getIdCarrera()}}"
+                       class="danger"
+                       th:text="#{button.eliminar}">
+                        Eliminar
+                    </a>
+                    <a th:href="@{'/admin/carreras/editar/' + ${carrera.getIdCarrera()}}"
+                       th:text="#{button.editar}">
+                        Editar
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</section>
+</html>

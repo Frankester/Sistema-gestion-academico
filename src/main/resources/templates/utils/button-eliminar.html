@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<form th:fragment="btn-eliminar(link, message)" th:action="@{${link}}"
+      method="post"
+      th:onsubmit="return confirm(message);"
+      style="display:inline">
+
+  <button
+          type="submit"
+          class="btn-danger"
+          th:text="#{button.eliminar}">
+    Eliminar
+  </button>
+</form>
+
+</html>

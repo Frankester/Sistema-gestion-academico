@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{examenes.administrar.title}">Administrar Examenes</title>
+
+<section>
+
+  <h2 th:text="#{examenes.administrar.heading}">Administrar examenes</h2>
+
+  <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+  <a th:href="@{/admin/examenes/nuevo}" class="btn-secondary"
+     th:text="#{button.nuevoExamen}">
+    Nueva Instancia Examen
+  </a>
+
+
+  <div th:if="${#lists.isEmpty(instancias)}"
+       th:text="#{examenes.empty}"
+       class="empty-message"></div>
+
+  <table class="table" th:if="${!#lists.isEmpty(instancias)}">
+    <thead>
+    <tr>
+      <th th:text="#{label.materia}">Materia</th>
+      <th th:text="#{label.docentes}">Docentes</th>
+      <th th:text="#{label.fecha}">Fecha</th>
+      <th th:text="#{label.acciones}">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="instancia : ${instancias}">
+      <td th:text="${instancia.getMateriaNombre()}"></td>
+
+      <td th:text="${instancia.getDocentes()}"></td>
+
+      <td th:text="${instancia.getFecha()}"></td>
+      <td>
+        <a th:href="@{'/admin/examenes/editar/' + ${instancia.getIdExamen()}}"
+           th:text="#{button.editar}"></a>
+
+        <th:block  th:replace="~{utils/button-eliminar ::
+          btn-eliminar('/admin/examenes/' + ${instancia.getIdExamen()} + '/eliminar',
+          '¿Estás seguro que querés eliminar la instancia de examen ?')}"
+        />
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</section>
+</html>

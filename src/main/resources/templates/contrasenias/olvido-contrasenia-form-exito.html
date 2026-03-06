@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8" content="text/html;">
+    <title th:text="#{contrasenias.olvido.form.title}">Cambio Contraseña</title>
+
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+</head>
+<body>
+
+<main class="container">
+    <h2 class="section-title" th:text="#{contrasenias.olvido.form.heading}">
+        Cambio de contraseña
+    </h2>
+
+    <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+    <p class="section-subtitle"
+       th:text="#{contrasenias.olvido.form.success.helper}">
+        Te enviamos mail con un enlace para restablecer tu contraseña.
+    </p>
+</main>
+
+</body>
+</html>

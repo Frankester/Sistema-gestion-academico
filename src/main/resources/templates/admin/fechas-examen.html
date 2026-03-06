@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="${esEditar} ? #{examenes.title-edit}: #{examenes.title}">
+  Cargar Fecha Examen
+</title>
+
+<section>
+
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{'/admin/examenes'}"
+       th:text="#{nav.examenes}">Examenes</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="${esEditar} ?
+        @{'/admin/examenes/editar/'+${idExamen}} :
+        @{'/admin/examenes/nuevo'}"
+       th:text="${esEditar} ? #{nav.edit} :#{nav.nuevo}">Nuevo</a>
+  </div>
+
+  <h2 class="section-title"
+      th:text="${esEditar} ? #{examenes.heading-edit}: #{examenes.heading}">
+    Subir fecha de examen
+  </h2>
+
+  <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/admin/examenes')}" />
+
+  <form th:action="${esEditar} ? @{'/admin/examenes/editar/' + ${idExamen}} : @{/admin/examenes/nuevo}"
+        th:object="${examenForm}"
+        method="post"
+        class="form-card">
+
+    <div class="form-group">
+      <label th:text="#{label.materia}">Materia</label>
+      <select th:field="*{materiaId}" required>
+        <option value="" th:text="#{select.placeholder}" disabled selected></option>
+        <option th:each="materia : ${materias}"
+                th:value="${materia.getIdMateria()}"
+                th:text="${materia.getNombre()}">
+        </option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('materiaId')}" th:errors="*{materiaId}"></span>
+    </div>
+
+    <div class="form-group">
+      <label th:text="#{label.fecha}">Fecha</label>
+      <input type="datetime-local" th:field="*{fecha}" required/>
+      <span class="red" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></span>
+    </div>
+
+    <div class="form-group">
+      <label th:text="#{label.sede}">Fecha</label>
+      <input type="text" th:field="*{sede}" required/>
+      <span class="red" th:if="${#fields.hasErrors('sede')}" th:errors="*{sede}"></span>
+    </div>
+
+
+    <div class="form-group">
+      <label th:text="#{label.docentes}">Docentes</label>
+      <select th:field="*{idDocentes}" required multiple>
+        <option value="" th:text="#{select.multile.placeholder}" disabled selected></option>
+        <option th:each="docente : ${docentes}"
+                th:value="${docente.getIdPersona()}"
+                th:text="#{nombre-y-apellido(${docente.getNombre()},${docente.getApellido()})}">
+        </option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('idDocentes')}" th:errors="*{idDocentes}"></span>
+    </div>
+
+    <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+    <th:block th:replace="~{utils/button-cancelar :: btn-cancelar('/admin/examenes')}" />
+
+  </form>
+
+</section>
+</html>

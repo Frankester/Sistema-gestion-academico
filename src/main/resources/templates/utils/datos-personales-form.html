@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="form(rol)"
+      th:replace="~{${rol}+'/base' :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{label.datos-personales}">Datos Personales</title>
+
+<section>
+  <h2 class="section-title"
+      th:text="#{label.datos-personales}"
+  >Datos Personales
+  </h2>
+
+  <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+  <form th:action="@{'/'+${rol}+'/datos'}"
+        th:object="${datosPersonalesForm}"
+        method="post"
+        class="form-card">
+
+    <div class="form-group">
+      <label for="documento" th:text="#{register.document}">Documento</label>
+      <input type="number"
+             th:field="*{documento}"
+             th:placeholder="#{register.document-number}"
+             required
+             autofocus
+      />
+      <span class="red" th:if="${#fields.hasErrors('documento')}" th:errors="*{documento}"></span>
+    </div>
+    <div class="form-group">
+      <label for="nombre" th:text="#{label.nombre}">Nombre</label>
+      <input type="text"
+             th:field="*{nombre}"
+             th:placeholder="#{label.nombre-example}"
+             required
+             autofocus
+      />
+      <span class="red" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+    </div>
+    <div class="form-group">
+      <label for="apellido" th:text="#{label.apellido}">Apellido</label>
+      <input type="text"
+             th:field="*{apellido}"
+             th:placeholder="#{label.apellido-example}"
+             required
+             autofocus
+      />
+      <span class="red" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="mail" th:text="#{label.mail}">Correo electrónico</label>
+      <input type="email"
+             th:field="*{mail}"
+             th:placeholder="#{label.mail-example}"
+             required
+      />
+      <span class="red" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></span>
+    </div>
+
+
+    <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+
+  </form>
+</section>
+</html>

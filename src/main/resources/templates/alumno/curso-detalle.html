@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{curso.title(${curso.getNombreMateria()})}">Curso</title>
+
+<section>
+
+    <div class="breadcrum">
+        <a class="breadcrum-item"
+           th:href="@{'/alumno/cursos'}"
+           th:text="#{nav.cursos}">Cursos</a>
+        <span>/</span>
+        <a class="breadcrum-item"
+           th:href="@{'/alumno/cursos/' +${curso.getIdCurso()}}"
+           th:text="#{nav.curso}">Curso</a>
+    </div>
+
+    <h2 class="section-title" th:text="#{curso.detail.heading(${curso.getNombreMateria()})}">
+        Detalles del curso
+    </h2>
+    <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/alumno/cursos')}" />
+
+    <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+    <div class="card">
+        <div class="info-row">
+            <span class="label" th:text="#{label.materia}"></span>
+            <span class="value" th:text="${curso.getNombreMateria()}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label" th:text="#{label.comision}"></span>
+            <span class="value" th:text="${curso.getComision()}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label" th:text="#{label.horarios-cursada}"></span>
+            <span class="value" th:text="${curso.getHorariosCursada()}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label" th:text="#{label.docente}"></span>
+            <span class="value" th:text="${curso.getNombreDocente()}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label" th:text="#{label.fecha-inicio-cursada}"></span>
+            <span class="value" th:text="${curso.getFechaInicioCursada()}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label" th:text="#{label.estado}"></span>
+            <span class="value" th:text="${curso.getEstadoCursada()}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label" th:text="#{label.nota-final}"></span>
+            <span class="value" th:text="${curso.getNotaFinal()}"></span>
+        </div>
+        <div class="info-row">
+            <span class="label" th:text="#{label.notas}"></span>
+            <span class="value"
+                  th:if="${#lists.isEmpty(curso.getNotas())}"
+                  th:text="#{nota.no-hay-para-mostrar}"
+            ></span>
+
+            <table class="table" th:if="${!#lists.isEmpty(curso.getNotas())}">
+                <thead>
+                <tr>
+                    <th th:text="#{label.fecha-subida}">Fecha subida</th>
+                    <th th:text="#{label.nota}">Nota</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="nota : ${curso.getNotas()}">
+                    <td th:text="${nota.getFechaSubida()}"></td>
+                    <td th:text="${nota.getNota()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+</html>

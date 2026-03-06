@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{cursos.title}">Administrar Cursos</title>
+
+<section>
+
+    <div class="breadcrum">
+        <a class="breadcrum-item"
+           th:href="@{'/admin/cursos'}"
+           th:text="#{nav.cursos}">Cursos</a>
+        <span>/</span>
+        <a class="breadcrum-item"
+           th:href="${esEditar} ?
+        @{'/admin/cursos/editar/'+${idCurso}} :
+        @{'/admin/cursos/nuevo'}"
+           th:text="${esEditar} ? #{nav.edit} :#{nav.nuevo}">Nuevo</a>
+    </div>
+
+    <h2 class="section-title" th:text="${esEditar} ? #{curso.heading-edit} : #{curso.heading}">
+        Agregar Nuevo Curso
+    </h2>
+
+    <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/admin/cursos')}" />
+
+    <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+
+    <form th:action="${esEditar} ?
+                    @{'/admin/cursos/editar/' + ${idCurso}} :
+                    @{/admin/cursos/nuevo}"
+          th:object="${cursoForm}"
+          method="post"
+          class="form-card">
+
+        <div class="form-group">
+            <label for="idMateria" th:text="#{label.materia}">Materia</label>
+            <select th:field="*{idMateria}" required>
+                <option value="" th:text="#{select.placeholder}"></option>
+                <option th:each="materia : ${materias}"
+                        th:value="${materia.getIdMateria()}"
+                        th:text="${materia.getNombre()}">
+                </option>
+            </select>
+            <span class="red" th:if="${#fields.hasErrors('idMateria')}" th:errors="*{idMateria}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="idDocente" th:text="#{label.docentes}">Docentes</label>
+            <select th:field="*{idDocente}" required>
+                <option value="" th:text="#{select.placeholder}"></option>
+                <option th:each="docente : ${docentes}"
+                        th:value="${docente.getIdPersona()}"
+                        th:text="#{nombre-y-apellido(${docente.getNombre()},${docente.getApellido()})}">
+                </option>
+            </select>
+            <span class="red" th:if="${#fields.hasErrors('idDocente')}" th:errors="*{idDocente}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="comision" th:text="#{label.comision}">Comision</label>
+            <input type="text" th:field="*{comision}" required/>
+            <span class="red" th:if="${#fields.hasErrors('comision')}" th:errors="*{comision}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="fechaInicioCursada" th:text="#{label.fecha-inicio-cursada}">Fecha inicio de la cursada</label>
+            <input type="date" th:field="*{fechaInicioCursada}" required/>
+            <span class="red" th:if="${#fields.hasErrors('fechaInicioCursada')}" th:errors="*{fechaInicioCursada}"></span>
+        </div>
+
+        <div class="form-group">
+            <label th:text="#{label.horarios}">Horarios</label>
+            <div th:each="horario, iterStat : *{horariosCursada}">
+                <div class="horario-row">
+
+                    <!-- ID oculto (importante incluso si es null) -->
+                    <input type="hidden"
+                           th:field="*{horariosCursada[__${iterStat.index}__].idHorario}" />
+
+                    <input type="number" th:placeholder="#{label.horario-desde}"
+                           th:field="*{horariosCursada[__${iterStat.index}__].horaDesde}" required/>
+                    <p th:text="#{label.a}">a</p>
+                    <input type="number" th:placeholder="#{label.horario-hasta}"
+                           th:field="*{horariosCursada[__${iterStat.index}__].horaHasta}" required/>
+                    <select th:field="*{horariosCursada[__${iterStat.index}__].diaDeLaSemana}" required>
+                        <option value="" th:text="#{select.placeholder}" disabled selected></option>
+                        <option th:value="LUNES" th:text="#{dia-de-la-semana.lunes}"></option>
+                        <option th:value="MARTES" th:text="#{dia-de-la-semana.martes}"></option>
+                        <option th:value="MIERCOLES" th:text="#{dia-de-la-semana.miercoles}"></option>
+                        <option th:value="JUEVES" th:text="#{dia-de-la-semana.jueves}"></option>
+                        <option th:value="VIERNES" th:text="#{dia-de-la-semana.viernes}"></option>
+                        <option th:value="SABADO" th:text="#{dia-de-la-semana.sabado}"></option>
+                    </select>
+
+                    <button type="submit"
+                            name="removeHorario"
+                            th:value="${iterStat.index}"
+                            class="btn-danger"
+                            th:text="#{button.eliminar}">
+                        eliminar
+                    </button>
+
+                </div>
+                <span class="red"
+                      th:if="${#fields.hasErrors('horariosCursada[__${iterStat.index}__].horaDesde')}"
+                      th:errors="*{horariosCursada[__${iterStat.index}__].horaDesde}"></span>
+                <span class="red"
+                      th:if="${#fields.hasErrors('horariosCursada[__${iterStat.index}__].horaHasta')}"
+                      th:errors="*{horariosCursada[__${iterStat.index}__].horaHasta}"></span>
+                <span class="red"
+                      th:if="${#fields.hasErrors('horariosCursada[__${iterStat.index}__].diaDeLaSemana')}"
+                      th:errors="*{horariosCursada[__${iterStat.index}__].diaDeLaSemana}"></span>
+            </div>
+             <button type="submit" name="addHorario" class="btn-add"
+                    th:text="#{button.agregar-horario}">
+            </button>
+        </div>
+
+        <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+
+    </form>
+</section>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{alumno/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{alumno.preinscripcion.title}">Preinscripcion a Materias</title>
+
+<section>
+  <h2 class="section-title"
+      th:text="#{nav.preinscripciones}">
+    Preinscribirse a Materias
+  </h2>
+
+
+  <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+  <form th:action="@{/alumno/preinscripciones}"
+        method="get"
+        class="filter-container">
+    <input type="text"
+           name="search"
+           th:value="${search}"
+           th:placeholder="#{label.busqueda.nombre-materia.placeholder}"
+           class="filter-input"/>
+
+    <button type="submit" th:text="#{button.buscar}" class="btn-secondary">
+      Buscar
+    </button>
+
+  </form>
+
+  <h3 class="section-subtitle"
+      th:text="#{nav.preinscripcion.realizadas}">
+    Preincripciones realizadas
+  </h3>
+
+  <div th:if="${#lists.isEmpty(preinscripciones)}"
+       th:text="#{alumno.preinscripcion.realizadas.empty}"
+       class="empty-message"></div>
+
+  <table class="table" th:if="${!#lists.isEmpty(preinscripciones)}">
+    <thead>
+    <tr>
+      <th th:text="#{label.materia}">Materia</th>
+      <th th:text="#{label.comision}">Comision</th>
+      <th th:text="#{label.horarios}">Horarios</th>
+      <th th:text="#{label.estado}">Estado</th>
+      <th th:text="#{label.acciones}">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="preinscripcion : ${preinscripciones}">
+      <td th:text="${preinscripcion.getNombreMateria()}"></td>
+      <td th:text="${preinscripcion.getComision()}"></td>
+      <td th:text="${preinscripcion.getHorariosCursada()}"></td>
+      <td th:text="${preinscripcion.getEstado()}"></td>
+      <td class="acciones">
+
+        <th:block th:if="${preinscripcion.getEstado() == 'PENDIENTE'}">
+          <th:block  th:replace="~{utils/button-eliminar ::
+          btn-eliminar('/alumno/preinscripciones/' + ${preinscripcion.getIdPreinscripcion()} + '/eliminar',
+          '¿Estás seguro que querés eliminar la preinscripcion ?')}"
+          />
+        </th:block>
+        <span th:if="${preinscripcion.getEstado() != 'PENDIENTE'}">-</span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <h3 class="section-subtitle"
+      th:text="#{nav.preinscripcion.materias-disponibles}">
+    Materias disponibles para preinscribirse
+  </h3>
+
+  <div th:if="${#lists.isEmpty(cursos)}"
+       th:text="#{alumno.preinscripcion.empty}"
+       class="empty-message"></div>
+
+  <table class="table" th:if="${!#lists.isEmpty(cursos)}">
+    <thead>
+    <tr>
+      <th th:text="#{label.materia}">Materia</th>
+      <th th:text="#{label.comision}">Comision</th>
+      <th th:text="#{label.horarios}">Horarios</th>
+      <th th:text="#{label.acciones}">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="curso : ${cursos}">
+      <td th:text="${curso.getNombreMateria()}"></td>
+      <td th:text="${curso.getComision()}"></td>
+      <td th:text="${curso.getHorariosCursada()}"></td>
+      <td class="acciones">
+
+        <th:block th:if="${!curso.conflictoHorario}">
+          <form th:action="@{'/alumno/preinscripciones/'+${curso.getIdCurso()}}"
+                method="post"
+                style="display:inline">
+
+            <button type="submit"
+                    class="btn-inscribirse"
+                    th:text="#{button.inscribirse}">
+              Inscribirse
+            </button>
+          </form>
+        </th:block>
+
+
+        <span th:if="${curso.conflictoHorario}">-</span>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</section>
+</html>

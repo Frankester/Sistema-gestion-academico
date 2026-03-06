@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{docente/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{curso.alumno.notas.title}"></title>
+
+<section>
+
+  <div class="breadcrum">
+    <a class="breadcrum-item"
+       th:href="@{'/docente/cursos'}"
+       th:text="#{nav.cursos}">Cursos</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/docente/cursos/'+${idCurso}+'/alumnos'}"
+       th:text="#{nav.alumnos}">Alumnos</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="@{'/docente/cursos/'+${idCurso}+'/alumnos/'+${idAlumno}+'/notas'}"
+       th:text="#{nav.notas}">Notas</a>
+    <span>/</span>
+    <a class="breadcrum-item"
+       th:href="${esEditar} ?
+        @{'/docente/cursos/'+${idCurso}+'/alumnos/'+${idAlumno}+'/notas/edit'+${idNota}} :
+        @{'/docente/cursos/'+${idCurso}+'/alumnos/'+${idAlumno}+'/notas/nuevo'}"
+       th:text="${esEditar} ? #{nav.edit} :#{nav.nuevo}">Nuevo</a>
+  </div>
+
+  <h2 class="section-title"
+      th:text="${esEditar} ?
+      #{curso.alumno.nota.heading-edit(${nombreAlumno})} :
+       #{curso.alumno.nota.heading(${nombreAlumno})}"
+  >Cargar nueva nota
+  </h2>
+
+
+  <th:block th:replace="~{utils/link-volver-atras ::
+      volverAtras('/docente/cursos/'+${idCurso}+'/alumnos/'+${idAlumno}+'/notas')}" />
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+  <form th:action="${esEditar} ?
+                    @{'/docente/cursos/' + ${idCurso} + '/alumnos/' +${idAlumno} + '/notas/edit/' + ${idNota}} :
+                    @{'/docente/cursos/'+ ${idCurso} + '/alumnos/' +${idAlumno} + '/notas/nuevo'}"
+        th:object="${notaForm}"
+        method="post"
+        class="form-card">
+
+    <div class="form-group">
+      <label for="nota" th:text="#{label.nota}">Nota</label>
+      <input type="number"
+             th:field="*{nota}"
+             th:placeholder="#{alumno.nota(${nombreAlumno})}"
+             required
+             autofocus
+      />
+      <span class="red" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}"></span>
+    </div>
+
+    <input type="hidden" name="nombreAlumno" th:value="${nombreAlumno}">
+
+
+    <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+    <th:block th:replace="~{utils/button-cancelar :: btn-cancelar('/docente/cursos/' + ${idCurso} + '/alumnos/' +${idAlumno} + '/notas')}" />
+
+  </form>
+</section>
+</html>

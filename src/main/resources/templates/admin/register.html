@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{register.title}"></title>
+
+<section>
+
+  <h2 class="section-title" th:text="#{register.heading}"></h2>
+
+
+  <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+  <form th:action="@{/admin/register}"
+        th:object="${usuarioDTO}"
+        method="post"
+        class="form-card">
+
+    <div class="form-group">
+      <div class="row">
+        <label for="username" th:text="#{login.username}"></label><span class="red">*</span>
+      </div>
+      <input type="text" th:field="*{username}" th:placeholder="#{login.username}" autofocus required/>
+      <span class="red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <label for="password" th:text="#{login.password}"></label><span class="red">*</span>
+      </div>
+      <input type="password" th:field="*{password}" th:placeholder="#{login.password}" required/>
+      <span class="red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <label for="authority" th:text="#{register.user-role}"></label><span class="red">*</span>
+      </div>
+
+      <select th:field="*{authority}" required>
+        <option value="" disabled hidden th:text="#{register.user-role-select}" selected></option>
+        <option value="alumno" th:text="#{register.role-student}"></option>
+        <option value="docente" th:text="#{register.role-professor}"></option>
+        <option value="admin" th:text="#{register.role-admin}"></option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('authority')}" th:errors="*{authority}"></span>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <label for="idPlan" th:text="#{register.plan}"></label><span class="red">*</span>
+      </div>
+
+      <select th:field="*{idPlan}" required>
+        <option value="" disabled hidden th:text="#{register.user-plan-select}" selected></option>
+        <option th:each="plan : ${planes}"
+                th:value="${plan.getIdPlan()}"
+                th:text="${plan.getNombre() +' - '+ plan.getCarrera()}">
+        </option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('idPlan')}" th:errors="*{idPlan}"></span>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <label for="documento" th:text="#{register.document}"></label><span class="red">*</span>
+      </div>
+      <input type="number"  th:field="*{documento}" th:placeholder="#{register.document-number}" required>
+      <span class="red" th:if="${#fields.hasErrors('documento')}" th:errors="*{documento}"></span>
+    </div>
+    <div class="form-group">
+      <div class="inline row">
+        <div>
+          <label for="nombre" th:text="#{register.name}">Nombre de la persona</label>
+          <input type="text"  th:field="*{nombre}"  th:placeholder="#{register.name}">
+        </div>
+        <div>
+          <label for="apellido" th:text="#{register.last-name}">Apellido de la persona</label>
+          <input type="text" th:field="*{apellido}" th:placeholder="#{register.last-name}">
+        </div>
+      </div>
+    </div>
+
+    <th:block th:replace="~{utils/button-guardar :: btn-guardar}" />
+
+  </form>
+</section>
+</html>

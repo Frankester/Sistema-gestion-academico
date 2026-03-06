@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: layout (~{::title}, ~{::section}, ~{::nav})}">
+
+<title th:text="#{title}"></title>
+
+<nav th:if="${roles.contains('docente')}"
+     th:replace="${roles.contains('docente')} ? ~{docente/base :: .main-nav} : ~{}"
+     class="main-nav">
+</nav>
+
+<nav th:if="${roles.contains('admin')}"
+     th:replace="${roles.contains('admin')} ? ~{admin/base :: .main-nav}: ~{}"
+     class="main-nav">
+</nav>
+
+<nav th:if="${roles.contains('alumno')}"
+     th:replace="${roles.contains('alumno')} ? ~{alumno/base :: .main-nav}: ~{}"
+     class="main-nav">
+</nav>
+
+<section>
+    <h1 th:text="#{title}" class="section-title"></h1>
+    <div class="content card">
+        <p th:utext="#{welcome(${username})}"></p>
+
+        <div th:if="${roles.contains('alumno')}">
+            <p th:utext="#{bienvenida.alumno}"></p>
+            <ol>
+                <li th:utext="#{requirement[0].student}"></li>
+                <li th:utext="#{requirement[1].student}"></li>
+                <li th:utext="#{requirement[2].student}"></li>
+                <li th:utext="#{requirement[3].student}"></li>
+                <li th:utext="#{requirement[4].student}"></li>
+            </ol>
+        </div>
+        <div th:if="${roles.contains('docente')}">
+            <p th:utext="#{bienvenida.professor}"></p>
+            <ol>
+                <li th:utext="#{requirement[0].professor}"></li>
+                <li th:utext="#{requirement[1].professor}"></li>
+                <li th:utext="#{requirement[2].professor}"></li>
+            </ol>
+        </div>
+        <div th:if="${roles.contains('admin')}">
+            <p th:utext="#{bienvenida.admin}"></p>
+            <ol>
+                <li th:utext="#{requirement[0].admin}"></li>
+                <li th:utext="#{requirement[1].admin}"></li>
+                <li th:utext="#{requirement[2].admin}"></li>
+                <li th:utext="#{requirement[3].admin}"></li>
+            </ol>
+        </div>
+
+    </div>
+</section>
+

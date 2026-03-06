@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{alumno/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{cursos.actuales.title}">Cursos Actuales</title>
+
+<section>
+    <h2 th:text="#{cursos.actuales.heading}">Cursos actuales</h2>
+
+    <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+    <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+
+
+    <div th:if="${#lists.isEmpty(cursos)}"
+         th:text="#{cursos.empty}"
+         class="empty-message"></div>
+
+    <table class="table" th:if="${!#lists.isEmpty(cursos)}">
+        <thead>
+        <tr>
+            <th th:text="#{label.materia}">Materia</th>
+            <th th:text="#{label.comision}">Comision</th>
+            <th th:text="#{label.fecha-inicio}">Fecha inicio de cursada</th>
+            <th th:text="#{label.nota-final}">Nota final</th>
+            <th th:text="#{label.estado}">Estado</th>
+            <th th:text="#{label.acciones}">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="curso : ${cursos}">
+            <td th:text="${curso.getNombreMateria()}"></td>
+            <td th:text="${curso.getComision()}"></td>
+            <td th:text="${curso.getFechaInicioCursada()}"></td>
+            <td th:text="${#objects.nullSafe(curso.getNotaFinal(), '-')}"></td>
+            <td th:text="${curso.getEstadoCursada()}"></td>
+            <td>
+                <a th:href="@{'/alumno/cursos/' + ${curso.getIdCurso()}}"
+                   th:text="#{button.ver-cursada}">
+                    Ver Cursada
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</section>
+</html>

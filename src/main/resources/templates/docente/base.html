@@ -1,0 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle,content)"
+      th:replace="~{base :: layout (${pageTitle}, ${content}, ~{::nav})}">
+
+<nav class="main-nav">
+  <a th:href="@{/docente/examenes}" th:text="#{nav.examenes}">Exámenes</a>
+  <a th:href="@{/docente/cursos}" th:text="#{nav.cursos}">Cursos</a>
+  <a th:href="@{/docente/datos}" th:text="#{nav.datos-personales}">Datos personales</a>
+</nav>
+</html>

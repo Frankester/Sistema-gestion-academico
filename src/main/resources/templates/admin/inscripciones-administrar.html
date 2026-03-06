@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{inscripciones.administrar.title}">Administrar Inscripciones</title>
+
+<section>
+
+  <h2 th:text="#{inscripciones.administrar.heading}">Administrar inscripciones</h2>
+
+  <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+
+  <div th:if="${#lists.isEmpty(preinscripciones)}"
+       th:text="#{inscripciones.empty}"
+       class="empty-message"></div>
+
+  <table class="table" th:if="${!#lists.isEmpty(preinscripciones)}">
+    <thead>
+    <tr>
+      <th th:text="#{label.alumno}">Alumno</th>
+      <th th:text="#{label.materia}">Materia</th>
+      <th th:text="#{label.comision-deseada}">Comision deseada</th>
+      <th th:text="#{label.estado}">Estado</th>
+      <th th:text="#{label.acciones}">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="preinscripcion : ${preinscripciones}">
+      <td th:text="${preinscripcion.getNombreApellidoAlumno()}"></td>
+
+      <td th:text="${preinscripcion.getNombreMateria()}"></td>
+
+      <td><a th:text="${preinscripcion.getComision()}"
+              th:href="@{'/admin/cursos/' + ${preinscripcion.getComision()}}"></a></td>
+      <td th:text="${preinscripcion.getEstado()}"></td>
+      <td>
+        <a th:href="@{'/admin/inscripciones/' + ${preinscripcion.getIdPreinscripcion()} + '/aceptar'}"
+           th:text="#{button.aceptar}"></a>
+
+        <a th:href="@{'/admin/inscripciones/' + ${preinscripcion.getIdPreinscripcion()} + '/rechazar'}"
+           th:text="#{button.rechazar}"
+           class="red"></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</section>
+</html>

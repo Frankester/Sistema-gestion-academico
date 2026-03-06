@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{inscripcion.title}">Inscribir Alumno</title>
+
+<section>
+
+  <h2 class="section-title" th:text="#{inscripcion.heading}">Inscribir alumno a curso</h2>
+
+  <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+
+  <form th:action="@{/admin/inscripciones/nuevo}"
+        th:object="${inscripcionForm}"
+        method="post"
+        class="form-card">
+
+    <div class="form-group">
+      <label for="alumno" th:text="#{register.role-student}">Alumno</label>
+      <select id="alumno" th:field="*{alumnoId}" required>
+        <option value="" th:text="#{select.placeholder}">Seleccione</option>
+        <option th:each="alumno : ${alumnos}"
+                th:value="${alumno.getIdPersona()}"
+                th:text="#{nombre-y-apellido(${alumno.getNombre()},${alumno.getApellido()})}">
+        </option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('alumnoId')}" th:errors="*{alumnoId}"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="curso" th:text="#{label.curso}">Curso</label>
+      <select id="curso" th:field="*{cursoId}" required>
+        <option value="" th:text="#{select.placeholder}"></option>
+        <option th:each="curso : ${cursos}"
+                th:value="${curso.getIdCurso()}"
+                th:text="#{nombre-curso(${curso.getComision()}, ${curso.getNombreMateria()})}">
+        </option>
+      </select>
+      <span class="red" th:if="${#fields.hasErrors('cursoId')}" th:errors="*{cursoId}"></span>
+    </div>
+
+    <button type="submit" class="btn-primary"
+            th:text="#{nav.inscribir}">
+      Inscribir
+    </button>
+
+  </form>
+
+</section>
+</html>

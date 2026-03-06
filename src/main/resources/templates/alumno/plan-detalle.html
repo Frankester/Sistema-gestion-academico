@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{alumno/base :: layout (~{::title}, ~{::section})}">
+
+<title th:text="#{plan.title(${plan.getNombre()})}">Plan </title>
+
+<section>
+  <h2 class="section-title" th:text="#{plan.title(${plan.getNombre()})}">
+    Plan
+  </h2>
+
+  <th:block th:replace="~{utils/mensaje-error :: error(${error})}" />
+  <th:block th:replace="~{utils/mensaje-exito :: exito(${success})}" />
+
+  <div class="card plan-card">
+
+    <div class="plan-header">
+      <div class="info-row">
+        <span class="label" th:text="#{label.plan}"></span>
+        <span class="value" th:text="${plan.getNombre()}"></span>
+      </div>
+
+      <div class="info-row">
+        <span class="label" th:text="#{label.carrera}"></span>
+        <span class="value" th:text="${plan.getCarrera()}"></span>
+      </div>
+    </div>
+    <hr/>
+
+    <div class="niveles">
+      <div class="nivel"
+           th:each="anio : ${plan.getAnios()}">
+
+        <h3 class="nivel-title"
+            th:text="'Nivel ' + ${anio.getAnio()}">
+        </h3>
+
+        <ul class="materias-list">
+          <li class="materia-item"
+              th:each="materia : ${anio.getMaterias()}"
+          >
+
+            <div class="materia-contenido">
+              <div class="materia-linea">
+                <span class="materia-nombre"
+                      th:text="${materia.getNombreMateria()}">
+                </span>
+
+                <div class="materia-acciones">
+                  <a class="btn-check"
+                     th:if="${!materia.curso}"
+                     th:href="@{'/alumno/plan/materias/'+${materia.idMateria}+'/puede-cursar'}"
+                     th:text="#{button.comprobar.puede-cursar}">
+                    Comprobar si puede cursar
+                  </a>
+
+                  <a class="btn-check secondary"
+                     th:if="${!materia.aprobo}"
+                     th:href="@{'/alumno/plan/materias/'+${materia.idMateria}+'/puede-aprobar'}"
+                     th:text="#{button.comprobar.puede-aprobar}">
+                    Comprobar si puede aprobar
+                  </a>
+                </div>
+              </div>
+              <div class="materia-resultado"
+                   th:if="${materiaResultado != null &&
+                      materiaResultado.resultadoMateriaId == materia.idMateria}"
+                    th:classappend="${materiaResultado.puede} ? ' success' : ' error'">
+                <span th:text="${materiaResultado.puede} ?
+                      (${materiaResultado.tipo.name()} == 'CURSAR' ?
+                        #{alumno.curso.puede-cursar} :
+                        #{alumno.curso.puede-aprobar}) :
+                      (${materiaResultado.tipo.name()} == 'CURSAR' ?
+                        #{alumno.curso.no-puede-cursar} :
+                        #{alumno.curso.no-puede-aprobar})">
+                </span>
+
+                <div class="faltantes"
+                     th:if="${!materiaResultado.puede}"
+                     th:text="#{alumno.curso.falta(${materiaResultado.materiasQueNecesita})}">
+                </div>
+              </div>
+
+            </div>
+          </li>
+        </ul>
+
+        <p class="empty"
+           th:if="${#lists.isEmpty(anio.materias)}"
+           th:text="#{plan.sin-materias}">
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+
+</section>
+</html>

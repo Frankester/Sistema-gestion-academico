@@ -1,0 +1,49 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.table th, .table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: var(--primary);
+    color: white;
+    text-align: left;
+}
+
+.table tr:hover {
+    background-color: #f2f2f2;
+}
+
+.danger {
+    color: var(--danger);
+    margin-left: 0.5rem;
+}
+
+
+.actions-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.btn-danger {
+    background-color: transparent;
+    color: var(--danger);
+    margin-left: 0.5rem;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.acciones {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
